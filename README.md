@@ -11,8 +11,8 @@ Além disso, o MEP foi concebido com modularidade em mente, facilitando atualiza
 
 ## Integrantes
 
-* Gabbriel Dos Santos Souza
-* 
+* Gabriel Dos Santos Souza
+* Rafael Silva Oliveira
 
 ## Orientador
 
