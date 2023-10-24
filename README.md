@@ -13,6 +13,7 @@ Além disso, o MEP foi concebido com modularidade em mente, facilitando atualiza
 
 * Gabriel Dos Santos Souza
 * Rafael Silva Oliveira
+* 
 
 ## Orientador
 
