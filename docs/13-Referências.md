@@ -1,21 +1,21 @@
 # Referências
 
-Inclua todas as referências (livros, artigos, sites, etc) utilizados no desenvolvimento do trabalho.
+**[1]** - _Booch, G., Rumbaugh, J., \& Jacobson, I. (1999). The Unified Modeling Language User Guide. Addison-Wesley Professional._
 
-> **Links Úteis**:
-> - [Formato ABNT](https://www.normastecnicas.com/abnt/trabalhos-academicos/referencias/)
-> - [Referências Bibliográficas da ABNT](https://comunidade.rockcontent.com/referencia-bibliografica-abnt/)
+**[2]** - _Fowler, M. (2003). UML Distilled: A Brief Guide to the Standard Object Modeling Language. Addison-Wesley Professional._
 
-Exemplos de referências bibliográficas:
+**[3]** - _Larman, C. (2004). Applying UML and Patterns: An Introduction to Object-Oriented Analysis and Design. Prentice Hall._
 
+**[4]** - _Pressman, R. S. (2014). Software Engineering: A Practitioner's Approach. McGraw-Hill Education._
 
-**[1]** - _ELMASRI, Ramez; NAVATHE, Sham. **Sistemas de banco de dados**. 7. ed. São Paulo: Pearson, c2019. E-book. ISBN 9788543025001._
+**[5]** - _Leffingwell, D., & Widrig, D. (2003). Managing Software Requirements: A Use Case Approach. Addison-Wesley Professional._
 
-**[2]** - _COPPIN, Ben. **Inteligência artificial**. Rio de Janeiro, RJ: LTC, c2010. E-book. ISBN 978-85-216-2936-8._
+**[6]** - _Bass, L., Clements, P., & Kazman, R. (2012). Software Architecture in Practice. Addison-Wesley Professional._
 
-**[3]** - _CORMEN, Thomas H. et al. **Algoritmos: teoria e prática**. Rio de Janeiro, RJ: Elsevier, Campus, c2012. xvi, 926 p. ISBN 9788535236996._
+**[6]** - _Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional._
 
-**[4]** - _SUTHERLAND, Jeffrey Victor. **Scrum: a arte de fazer o dobro do trabalho na metade do tempo**. 2. ed. rev. São Paulo, SP: Leya, 2016. 236, [4] p. ISBN 9788544104514._
+**[6]** - _Vinod Kumar Garg & N. K. Venkitakrishnan. (2008). Enterprise Resource Planning: Concepts and Practice_
 
-**[5]** - _RUSSELL, Stuart J.; NORVIG, Peter. **Inteligência artificial**. Rio de Janeiro: Elsevier, c2013. xxi, 988 p. ISBN 9788535237016._
+**[6]** - _Moynihan, L. M., & Cegielski, C. G. (2004). Enterprise Resource Planning (ERP) Systems: An Empirical Analysis of Benefits_
 
+**[6]** - _Prasad Bingi, Maneesh K. Sharma & Jayanth K. Godla. (2006). Critical Issues Affecting an ERP Implementation_
