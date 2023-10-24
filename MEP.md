@@ -1,23 +1,22 @@
-# TÍTULO DO PROJETO
+# MarketEvoPro (MEP) 
 
-`CURSO`
+`Sistemas de Informação`
 
-`DISCIPLINA`
+`Trabalho Final de Conclução de Curso`
 
-`SEMESTRE`
+`8° Semestre`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+O MarketEvoPro (MEP) é um sistema de ERP inovador que visa simplificar a criação e controle de campanhas de marketing, além de oferecer ferramentas básicas de gestão interna para empresas. O projeto passou por uma rigorosa fase de planejamento, modelagem de banco de dados e implementação, empregando Python e Flask para o desenvolvimento do backend e HTML para a interface de usuário. Uma característica distintiva é a integração da API do Power BI, que permite a geração de relatórios e dashboards analíticos, proporcionando uma visão aprofundada dos dados para apoiar a tomada de decisões estratégicas. 
+Além disso, o MEP foi concebido com modularidade em mente, facilitando atualizações e integrações futuras, garantindo sua adaptação às mudanças constantes do mundo dos negócios e sua escalabilidade ao longo do tempo. Em resumo, o MEP é uma solução versátil e eficaz para otimizar operações de marketing e gestão de empresas.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
+* Gabbriel Dos Santos Souza
+* 
 
 ## Orientador
 
-* Nome completo do professor 1
+* Leonardo Vilela Cardoso
 
 ## Instruções de utilização
 
