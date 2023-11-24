@@ -1,0 +1,37 @@
+<!-- user_management_section.html -->
+<!-- Tabela de usuários convidados -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Permissão</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in convidados %}
+        <tr>
+            <td>{{ usuario['usuario_id'] }}</td>
+            <td>{{ usuario['nome'] }}</td>
+            <td>{{ usuario['permissao'] }}</td>
+            <td>
+                <!-- Formulário para atualizar permissão -->
+                <form action="{{ url_for('update_permission', user_id=usuario['usuario_id']) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <select name="permissao">
+                        <option value="Convidado" {% if usuario['permissao']=='Convidado' %}selected{% endif %}>
+                            Convidado</option>
+                        <option value="Usuario" {% if usuario['permissao']=='Usuario' %}selected{% endif %}>Usuário
+                        </option>
+                        <option value="Gerente" {% if usuario['permissao']=='Gerente' %}selected{% endif %}>Gerente
+                        </option>
+                        <option value="Admin" {% if usuario['permissao']=='Admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

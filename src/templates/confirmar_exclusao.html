@@ -1,0 +1,7 @@
+<form action="{{ url_for('excluir_projeto', projeto_id=projeto_id) }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="csrf_token"
+        value="{{ csrf_token() }}">
+    <p>Tem certeza de que deseja excluir este projeto?</p>
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+</form>

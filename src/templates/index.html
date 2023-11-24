@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Market EvoPro</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5/dist/jquery.inputmask.min.js"></script>
+</head>
+<style>
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+
+    #page-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    #content-wrap {
+        flex: 1;
+    }
+
+    .main-layout-image {
+        width: 100%;
+        height: 85vh;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+
+    .navbar.bg-dark {
+        background-color: #00152C !important;
+    }
+
+    /* Para o Chrome, Edge e Safari */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(120, 120, 120, 0.5);
+        /* Cor cinza com 50% de transparência */
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: rgba(240, 240, 240, 0.5);
+        /* Cor cinza claro com 50% de transparência */
+    }
+
+    /* Para o Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(120, 120, 120, 0.5) rgba(240, 240, 240, 0.5);
+    }
+
+    .finance-section {
+        background-color: #ffffff;
+        text-align: center;
+        padding: 5px 0;
+    }
+
+    .finance-title {
+        color: #12B9D4;
+        font-size: 5em;
+        margin-bottom: 20px;
+        font-weight: bold;
+        letter-spacing: 5px;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .finance-description {
+        color: #000000;
+        font-size: 3em;
+        font-weight: 300;
+        font-weight: bold;
+        margin-top: -35px;
+    }
+
+    .log-section {
+        background-color: #ffffff;
+        text-align: center;
+        padding: 5px 0;
+    }
+
+    .log-title {
+        color: #12B9D4;
+        font-size: 5em;
+        margin-bottom: 20px;
+        font-weight: bold;
+        letter-spacing: 5px;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .log-description {
+        color: #000000;
+        font-size: 3em;
+        font-weight: 300;
+        font-weight: bold;
+        margin-top: -35px;
+    }
+
+    .rh-section {
+        background-color: #ffffff;
+        text-align: center;
+        padding: 5px 0;
+    }
+
+    .rh-title {
+        color: #12B9D4;
+        font-size: 5em;
+        margin-bottom: 20px;
+        font-weight: bold;
+        letter-spacing: 5px;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .rh-description {
+        color: #000000;
+        font-size: 3em;
+        font-weight: 300;
+        font-weight: bold;
+        margin-top: -35px;
+    }
+
+    /* Estilos existentes e adicionais para responsividade */
+    @media (max-width: 768px) {
+
+        .finance-title,
+        .log-title,
+        .rh-title {
+            font-size: 3rem;
+        }
+
+        .finance-description,
+        .log-description,
+        .rh-description {
+            font-size: 2rem;
+        }
+
+        .navbar-brand div {
+            display: block;
+            text-align: left;
+        }
+    }
+
+    #backToTop {
+        background-color: rgba(119, 119, 119, 0.5);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        /* para centralizar o texto verticalmente */
+        border-radius: 50%;
+        /* torna o botão redondo */
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #backToTop:hover {
+        background-color: rgba(85, 85, 85, 0.7);
+    }
+</style>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- Cabeçalho -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height: 66px;">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Logo"
+                        style="width: 10%; vertical-align: middle; margin-top: -25px;">
+                    <div style="display: inline-block; font-weight: bold; text-align: center;">
+                        <div>
+                            <font size="5px" face="Fredoka, sans-serif">MARKET</font>
+                        </div>
+                        <div style="margin-top: -10px;"><span style="color: #12B9D4;">
+                                <font size="4px" face="Fredoka, sans-serif">EVO</font>
+                            </span>
+                            <font size="4px" face="Fredoka, sans-serif">PRO</font>
+                        </div>
+                    </div>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#recursosModal">Recursos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">Contato</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Fullscreen Image -->
+            <div class="fullscreen-image">
+                <img src="static/images/layout.png" class="main-layout-image">
+            </div>
+            <!-- Seção Finanças -->
+            <div class="finance-section">
+                <h2 class="finance-title">FINANÇAS</h2>
+                <p class="finance-description">Gerencie suas finanças, contabilidade e muito mais</p>
+            </div>
+            <!-- Fullscreen Image -->
+            <div class="fullscreen-image">
+                <img src="static/images/layout-financas.png" class="main-layout-image">
+            </div>
+            <!-- Seção Logística -->
+            <div class="log-section">
+                <h2 class="log-title">LOGÍSTICA</h2>
+                <p class="log-description">Controle seu estoque, distribuição e cadeia de suprimentos</p>
+            </div>
+            <!-- Fullscreen Image -->
+            <div class="fullscreen-image">
+                <img src="static/images/layout-logistica.png" class="main-layout-image">
+            </div>
+            <!-- Seção RH -->
+            <div class="rh-section">
+                <h2 class="rh-title">RECURSOS HUMANOS</h2>
+                <p class="rh-description">Administre sua equipe, folha de pagamento e processos de RH</p>
+            </div>
+            <!-- Fullscreen Image -->
+            <div class="fullscreen-image">
+                <img src="static/images/layout-rh.png" class="main-layout-image">
+            </div>
+            <!-- Seção publi -->
+            <section style="background-color: #00152C; padding: 50px 0; text-align: center;">
+                <a href="#" style="text-decoration: none; color: inherit;">
+                    <h1
+                        style="color: white; font-size: 150px; margin-bottom: 20px; font-family: Fredoka, sans-serif;margin-top: -80px;">
+                        MARKET
+                    </h1>
+                    <div
+                        style="display: flex; justify-content: center; align-items: center;margin-top: -60px;margin-bottom: -70px;">
+                        <h2
+                            style="color: #12B9D4; font-size: 100px; margin-right: 10px;font-family: Fredoka, sans-serif;">
+                            EVO
+                        </h2>
+                        <h2 style="color: white; font-size: 100px;font-family: Fredoka, sans-serif;">
+                            PRO
+                        </h2>
+                    </div>
+                </a>
+            </section>
+            <section style="background-color: white; padding: 50px 0; text-align: center;">
+
+                <h1 style="color: #12B9D4; font-size: 100px; margin-bottom: 20px; font-family: Fredoka, sans-serif;">
+                    VOCÊ NO CONTROLE <br>SEMPRE
+                </h1>
+
+            </section>
+            <section
+                style="background-color: #00152C; padding: 50px; text-align: left; color: white; font-family: Arial, sans-serif;">
+                <h2
+                    style="color: #12B9D4; font-size: 100px; margin-bottom: 20px; text-align: center; font-family: Fredoka, sans-serif;">
+                    POR QUE ESCOLHER O <br>
+                    <font color="white">MARKET</font> EVO<font color="white">PRO</font>
+                </h2>
+
+                <p style="color: white; font-size: 24px; margin-bottom: 20px;">
+                    O <b>MARKET <font color="#12B9D4">EVO</font>PRO</b> é uma solução completa para a gestão de
+                    negócios,
+                    oferecendo módulos de Finanças,
+                    Logística e Recursos Humanos.
+                </p>
+
+                <p style="color: white; font-size: 24px;">
+                    Com nossa plataforma, sua empresa pode:
+                </p>
+
+                <ul style="color: white; font-size: 24px; margin-left: 40px; margin-top: -15px;">
+                    <li>Centralizar operações em um único sistema.</li>
+                    <li>Otimizar processos e reduzir custos.</li>
+                    <li>Tomar decisões assertivas com base em dados confiáveis.</li>
+                    <li>Adaptar-se rapidamente às mudanças do mercado.</li>
+                    <li>Com uma interface amigável e suporte dedicado, o
+                        <b>MARKET <font color="#12B9D4">EVO</font>PRO</b> é a escolha ideal para empresas
+                        de
+                        todos os tamanhos e setores.
+                    </li>
+                </ul>
+                <button id="saibaMaisBtn"
+                    style="background-color: #12B9D4; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 20px; margin-top: 100px; border-radius: 20px; display: block; margin-left: auto; margin-right: auto;">
+                    Saiba Mais
+                </button>
+                <!-- Formulário oculto por padrão -->
+                <div id="contactForm"
+                    style="display: none; margin-top: 30px; width: 80%; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <form action="/send_email" method="post" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div style="flex: 1;">
+                            <b>Nome:</b><br>
+                            <input type="text" name="Nome" value="" required style="width: 100%;">
+                        </div>
+
+                        <div style="flex: 1;">
+                            <b>Telefone:</b><br>
+                            <input type="text" name="Telefone" value="" required style="width: 100%;">
+                        </div>
+
+                        <div style="width: 100%;">
+                            <b>Email para contato:</b><br>
+                            <input type="text" name="email" value="" required style="width: 100%;">
+                        </div>
+
+                        <div style="width: 100%;">
+                            <b>Mensagem:</b><br>
+                            <textarea name="Mensagem" rows="4" cols="50" required style="width: 100%;"></textarea>
+                        </div>
+
+                        <div style="width: 100%; text-align: center;">
+                            <input type="submit" value="Enviar"
+                                style="background-color: #12B9D4; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 15px; border-radius: 25px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease;">
+                        </div>
+                    </form>
+                </div>
+
+            </section>
+        </div>
+        <!-- Rodapé -->
+        <footer class="footer mt-auto py-3" style="background-color: #00152C; text-align: center;">
+            <div class="container">
+                <span style="font-size: 1em; color: white;">&copy; 2023 MARKET EVOPRO. Todos os direitos
+                    reservados.</span>
+            </div>
+        </footer>
+    </div>
+    <!-- Modal para Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/login" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Senha:</label>
+                            <input type="password" class="form-control" id="pwd" name="senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <!-- No modal de Login, dentro do formulário, logo após o botão "Entrar" -->
+                        <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal" data-toggle="modal"
+                            data-target="#forgotPasswordModal">Esqueceu sua senha?</button>
+                    </form>
+                    <!-- Link para abrir o modal de cadastro -->
+                    <p class="mt-3">
+                        <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Não tem uma
+                            conta? Cadastre-se</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Cadastro -->
+    <div class="modal" id="registerModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cadastre-se</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/register" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label for="name">Nome:</label>
+                            <input type="text" class="form-control" id="name" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" class="form-control" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="senha">Senha:</label>
+                            <input type="password" class="form-control" id="register-senha" name="senha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_senha">Confirmar Senha:</label>
+                            <input type="password" class="form-control" id="register-confirm_senha" name="confirm_senha"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contato">Contato:</label>
+                            <input type="text" class="form-control" id="register-contato" name="contato">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Esqueceu a Senha -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Esqueceu sua senha?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Insira seu e-mail para receber um link de redefinição de senha.</p>
+                    <form action="/forgot_password" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" class="form-control" id="forgotEmail" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar Link</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Recursos -->
+    <div class="modal fade" id="recursosModal" tabindex="-1" role="dialog" aria-labelledby="recursosModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="recursosModalLabel">Nossos Recursos</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row text-center">
+                        <!-- Gestão de Campanhas Publicitárias -->
+                        <div class="col-md-3">
+                            <i class="fa fa-bullhorn fa-2x"></i>
+                            <h5>Gestão de Campanhas</h5>
+                            <p>Planeje e meça o ROI de suas campanhas.</p>
+                        </div>
+                        <!-- Análise de Desempenho -->
+                        <div class="col-md-3">
+                            <i class="fa fa-chart-line fa-2x"></i>
+                            <h5>Análise de Desempenho</h5>
+                            <p>Relatórios detalhados sobre o desempenho.</p>
+                        </div>
+                        <!-- Automação de Marketing -->
+                        <div class="col-md-3">
+                            <i class="fa fa-robot fa-2x"></i>
+                            <h5>Automação de Marketing</h5>
+                            <p>Automação de e-mail e segmentação de público.</p>
+                        </div>
+                        <!-- Gestão de Redes Sociais -->
+                        <div class="col-md-3">
+                            <i class="fa fa-thumbs-up fa-2x"></i>
+                            <h5>Gestão de Redes Sociais</h5>
+                            <p>Programação e monitoramento de postagens.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Contato -->
+    <div class="modal" id="contactModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Contate-nos</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Telefone: (31) 98661-8927</p>
+                    <p>Email: mkterp.pro@gmail.com</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="https://wa.me/5531986618927?text=Olá!%20Estou%20interessado%20no%20MKTERP-PRO."
+                        target="_blank" class="btn btn-primary">
+                        Enviar Mensagem
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="backToTop" style="display: none; position: fixed; bottom: 10px; right: 10px; z-index: 9999;"
+        title="Voltar ao topo">
+        <font size="5px">&uarr;</font>
+    </button>
+    <script>
+        $(document).ready(function () {
+            $('#loginModal').on('hidden.bs.modal', function (e) {
+                if ($('.modal:visible').length) {
+                    $('body').addClass('modal-open');
+                }
+            });
+        });
+        $(document).ready(function () {
+            $("#register-contato").inputmask("(99) 99999-9999");
+        });
+        function scrollToTop(scrollDuration) {
+            const scrollHeight = window.scrollY,
+                scrollStep = Math.PI / (scrollDuration / 15),
+                cosParameter = scrollHeight / 2;
+            let scrollCount = 0,
+                scrollMargin;
+
+            requestAnimationFrame(step);
+            function step() {
+                setTimeout(function () {
+                    if (window.scrollY != 0) {
+                        requestAnimationFrame(step);
+                        scrollCount = scrollCount + 1;
+                        scrollMargin = cosParameter - cosParameter * Math.cos(scrollCount * scrollStep);
+                        window.scrollTo(0, (scrollHeight - scrollMargin));
+                    }
+                }, 15);
+            }
+        }
+
+        // Pega o botão
+        var backToTopButton = document.getElementById("backToTop");
+
+        // Mostra o botão quando o usuário rolar 100px para baixo
+        window.onscroll = function () {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        };
+
+        // Quando o usuário clicar no botão, rola a página para o topo suavemente
+        backToTopButton.onclick = function () {
+            scrollToTop(2000);
+        }
+
+        document.getElementById("saibaMaisBtn").onclick = function () {
+            var form = document.getElementById("contactForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!-- Seção de Gerenciamento de Projetos -->
+<div>
+    <h2>Gerenciamento de Projetos</h2>
+    <div class="mb-3">
+        <button class="btn btn-primary" id="adicionar-projeto-btn">Adicionar
+            Projeto</button>
+        <input type="text" class="form-control d-inline-block" style="width: 200px;" placeholder="Pesquisar...">
+        <button class="btn btn-secondary">Filtros ▼</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cliente</th>
+                    <th>Data Início</th>
+                    <th>Data Fim</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="projectTableBody">
+                {% for projeto in projetos %}
+                <tr>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.nome_cliente }}</td>
+                    <td>{{ projeto.data_inicio }}</td>
+                    <td>{{ projeto.data_fim }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-editar"
+                            data-projeto-id="{{ projeto.projeto_id }}">Editar</button>
+                        <button class="btn btn-danger btn-excluir"
+                            data-projeto-id="{{ projeto.projeto_id }}">Excluir</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

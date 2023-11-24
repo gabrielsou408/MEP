@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard MEP</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .mensagem-aviso {
+            font-size: 1.25em;
+            color: #007bff;
+        }
+
+        #financeiroSubmenu.collapsing {
+            transition: height 0.5s ease;
+            /* Ajuste a duração conforme necessário */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Bloco de Mensagens Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="container-fluid">
+        <!-- Cabeçalho -->
+        <div class="bg-dark text-white p-3 d-flex justify-content-between"
+            style="height: 66px; background-color: #00152C !important;">
+            <h1>Dashboard Market <span style="color: #12B9D4;">Evo</span>Pro</h1>
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" style="background-color: #00152C;">
+                    {{ username }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#configModal">Configurações</a>
+                    {% if permissao in ['Admin', 'Gerente'] %}
+                    <a href="#" id="manage-users-link" class="dropdown-item">Gerenciar Usuários</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra Lateral -->
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <!-- Links para usuários com permissões específicas -->
+                    {% if permissao in ['Admin', 'Gerente'] %}
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('gestao')">Gestão de
+                        Funcionários</a>
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('projetos')">Departamento de Projetos</a>
+                    <a href="#" class="list-group-item list-group-item-action" data-toggle="collapse"
+                        data-target="#financeiroSubmenu" aria-expanded="false" aria-controls="financeiroSubmenu">
+                        Departamento Financeiro
+                    </a>
+                    <!-- Submenu que será exibido/ocultado -->
+                    <div class="collapse" id="financeiroSubmenu">
+                        <a href="#" class="list-group-item list-group-item-action"
+                            onclick="showSection('despesas')">Despesas</a>
+                        <a href="#" class="list-group-item list-group-item-action"
+                            onclick="showSection('faturas')">Faturas</a>
+                    </div>
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('powerbi-geral')">Power BI - Geral</a>
+                    {% endif %}
+
+                    <!-- Link específico para o usuário do departamento_id 2 com permissao 'Usuario' -->
+                    {% if permissao == 'Usuario' and departamento_id == 2 %}
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('projetos')">Departamento de Projetos</a>
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('powerbi-projetos')">Power BI - Projetos</a>
+                    {% endif %}
+
+                    <!-- Link específico para o usuário do departamento_id 8 com permissao 'Usuario' -->
+                    {% if permissao == 'Usuario' and departamento_id == 8 %}
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('financeiro')">Departamento Financeiro</a>
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('powerbi-financeiro')">Power BI - Financeiro</a>
+                    {% endif %}
+
+                    <!-- Link específico para o usuário do departamento_id 5 com permissao 'Usuario' -->
+                    {% if permissao == 'Usuario' and departamento_id == 5 %}
+                    <a href="#" class="list-group-item list-group-item-action" data-toggle="collapse"
+                        data-target="#financeiroSubmenu" aria-expanded="false" aria-controls="financeiroSubmenu">
+                        Departamento Financeiro
+                    </a>
+                    <!-- Submenu que será exibido/ocultado -->
+                    <div class="collapse" id="financeiroSubmenu">
+                        <a href="#" class="list-group-item list-group-item-action"
+                            onclick="showSection('despesas')">Despesas</a>
+                        <a href="#" class="list-group-item list-group-item-action"
+                            onclick="showSection('faturas')">Faturas</a>
+                    </div>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('powerbi-rh')">Power
+                        BI - RH</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Área de Conteúdo Principal -->
+            <div class="col-md-9">
+                <h2>Bem-vindo ao Dashboard, {{ username }}</h2>
+                <div id="conteudo-inicio" class="conteudo-sec">
+                    {% if permissao == "Convidado" %}
+                    <p class="mensagem-aviso">Procure o gerente de TI para liberar acesso aos gráficos de BI.</p>
+                    {% endif %}
+                </div>
+                <!-- Seção Power BI Geral-->
+                <div id="conteudo-powerbi-geral" class="conteudo-sec hidden">
+                    <h2>Dashboard Power BI Geral</h2>
+                    <iframe title="tcc" width="1140" height="541.25"
+                        src="https://app.powerbi.com/reportEmbed?reportId=c46448b6-c9c3-4b0a-8b20-307f6751486e&autoAuth=true&ctid=14cbd5a7-ec94-46ba-b314-cc0fc972a161"
+                        frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+                <!-- Seção Power BI Projetos-->
+                <div id="conteudo-powerbi-projetos" class="conteudo-sec hidden">
+                    <h2>Dashboard Power BI Projetos</h2>
+                    <iframe title="projetos" width="1140" height="541.25"
+                        src="https://app.powerbi.com/reportEmbed?reportId=04c4db67-4f30-43e9-adae-c8142525c613&autoAuth=true&ctid=14cbd5a7-ec94-46ba-b314-cc0fc972a161"
+                        frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+                <!-- Seção Power BI Financeiro-->
+                <div id="conteudo-powerbi-financeiro" class="conteudo-sec hidden">
+                    <h2>Dashboard Power BI Financeiro</h2>
+                    <iframe title="financeiro" width="1140" height="541.25"
+                        src="https://app.powerbi.com/reportEmbed?reportId=fe3ae118-68f3-406f-9bb0-5620db787134&autoAuth=true&ctid=14cbd5a7-ec94-46ba-b314-cc0fc972a161"
+                        frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+                <!-- Seção Power BI RH-->
+                <div id="conteudo-powerbi-rh" class="conteudo-sec hidden">
+                    <h2>Dashboard Power BI Departamento Pessoal</h2>
+                    <iframe title="Departamento Pessoal" width="1140" height="541.25"
+                        src="https://app.powerbi.com/reportEmbed?reportId=2664cb75-f9ec-4078-a5b2-799236a41ba4&autoAuth=true&ctid=14cbd5a7-ec94-46ba-b314-cc0fc972a161"
+                        frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+                <!-- Seção de Gerenciamento de Usuários -->
+                {% if permissao in ['Admin', 'Gerente'] %}
+                <!-- Modal de Gerenciamento de Usuários -->
+                <div class="modal fade" id="userManagementModal" tabindex="-1" role="dialog"
+                    aria-labelledby="userManagementModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="userManagementModalLabel">Gerenciamento de Usuários</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Conteúdo carregado via AJAX -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- Seção de Gestão de funcionários -->
+                <div id="conteudo-gestao" class="conteudo-sec hidden">
+                    <h2>Gestão de Funcionário</h2>
+                    <!-- Conteúdo da lista de funcionários será carregado aqui -->
+                </div>
+
+                <!-- Seção de Gerenciamento de Projetos -->
+                <div id="conteudo-projetos" class="conteudo-sec hidden">
+                    <h2>Gerenciamento de Projetos</h2>
+                    <!-- O conteúdo do gerenciamento de projetos será carregado aqui -->
+                </div>
+
+                <!-- Seção de Gerenciamento de Projetos -->
+                <div id="conteudo-despesas" class="conteudo-sec hidden">
+                    <h2>Gerenciamento de Despesas</h2>
+                    <!-- O conteúdo do gerenciamento de despesas será carregado aqui -->
+                </div>
+
+                <!-- Seção de Gerenciamento de Projetos -->
+                <div id="conteudo-faturas" class="conteudo-sec hidden">
+                    <h2>Gerenciamento de Faturas</h2>
+                    <!-- O conteúdo do gerenciamento de faturas será carregado aqui -->
+                </div>
+
+                <!-- Modal Adicionar Funcionário -->
+                <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog"
+                    aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addEmployeeModalLabel">Adicionar Funcionário</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- O conteúdo do formulário será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Adicionar Projeto -->
+                <div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog"
+                    aria-labelledby="addProjectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addProjectModalLabel">Adicionar Projeto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- O conteúdo do formulário será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal de Detalhes do Projeto -->
+                <div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog"
+                    aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="projectDetailsModalLabel">Detalhes do Projeto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- O conteúdo do formulário será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal de Adicionar Novo Cliente -->
+                <div class="modal fade" id="addNewClientModal" tabindex="-1" role="dialog"
+                    aria-labelledby="addNewClientModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <!-- Cabeçalho, corpo e rodapé do modal -->
+                            <!-- Formulário para adicionar um novo cliente -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal de Confirmação de Exclusão -->
+                <div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteProjectModalLabel">Confirmar Exclusão</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- O conteúdo será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Editar Projeto -->
+                <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editProjectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editProjectModalLabel">Editar Projeto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- O conteúdo do formulário será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            var sections = ['gerenciamento-usuarios', 'gestao', 'powerbi-geral', 'powerbi-financeiro', 'powerbi-rh', 'despesas', 'faturas', 'projetos'];
+            sections.forEach(function (s) {
+                var el = document.getElementById('conteudo-' + s);
+                if (el) {
+                    el.classList.add('hidden');
+                }
+            });
+            var elToShow = document.getElementById('conteudo-' + section);
+            if (elToShow) {
+                elToShow.classList.remove('hidden');
+            }
+        }
+
+        function loadUserManagementModal() {
+            $.ajax({
+                url: '/manage_users',
+                type: 'GET',
+                success: function (data) {
+                    $('#userManagementModal .modal-body').html(data);
+                    $('#userManagementModal').modal('show');
+                }
+            });
+        }
+
+        function loadgestaoSection() {
+            $.ajax({
+                url: '/listar_funcionarios',
+                type: 'GET',
+                success: function (data) {
+                    $('#conteudo-gestao').html(data).removeClass('hidden');
+                    showSection('gestao');
+                }
+            });
+        }
+
+        function loadProjectManagementSection() {
+            $.ajax({
+                url: '/gerenciar_projetos',
+                type: 'GET',
+                success: function (data) {
+                    $('#conteudo-projetos').html(data).removeClass('hidden');
+                    showSection('projetos');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#manage-users-link').click(function (e) {
+                e.preventDefault();
+                loadUserManagementModal();
+            });
+
+            $('a[onclick="showSection(\'gestao\')"]').click(function (e) {
+                e.preventDefault();
+                loadgestaoSection();
+            });
+
+            $('a[onclick="showSection(\'projetos\')"]').click(function (e) {
+                e.preventDefault();
+                loadProjectManagementSection();
+            });
+
+            $(document).on('click', '#adicionar-funcionario-btn', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/adicionar_funcionario',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#addEmployeeModal .modal-body').html(data);
+                        $('#addEmployeeModal').modal('show');
+                    }
+                });
+            });
+
+            $(document).on('click', '#adicionar-projeto-btn', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/verificar_cliente',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#addProjectModal .modal-body').html(data);
+                        $('#addProjectModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Erro ao carregar o formulário de adição de projeto');
+                    }
+                });
+            });
+
+            $(document).on('change', '#usuario-select', function () {
+                var selectedOption = $(this).find('option:selected');
+                $('#nome-hidden').val(selectedOption.data('nome'));
+                $('#email-hidden').val(selectedOption.data('email'));
+            });
+
+            $(document).on('change', '#clientSelect', function () {
+                var selectedValue = $(this).val();
+                if (selectedValue === 'new') {
+                    $('#addProjectModal').modal('hide');
+                    $('#addNewClientModal').modal('show');
+                } else {
+                    $('#addProjectModal').modal('hide');
+                    $.ajax({
+                        url: '/adicionar_projeto',
+                        type: 'GET',
+                        data: { cliente_id: selectedValue },
+                        success: function (data) {
+                            $('#projectDetailsModal .modal-body').html(data);
+                            $('#projectDetailsModal').modal('show');
+                        },
+                        error: function () {
+                            alert('Erro ao carregar o formulário de detalhes do projeto');
+                        }
+                    });
+                }
+            });
+
+            $(document).on('click', '.btn-excluir', function () {
+                var projectId = $(this).data('projeto-id');
+                $('#deleteProjectModal .modal-body').load('/confirmar_exclusao/' + projectId);
+                $('#deleteProjectModal').modal('show');
+            });
+
+            $(document).on('click', '.btn-editar', function () {
+                var projectId = $(this).data('projeto-id');
+                $('#editProjectModal .modal-body').load('/editar_projeto/' + projectId);
+                $('#editProjectModal').modal('show');
+            });
+
+        });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

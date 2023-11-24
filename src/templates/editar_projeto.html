@@ -1,0 +1,45 @@
+<form id="editProjectForm" action="{{ url_for('atualizar_projeto') }}" method="post">
+    <input type="hidden" name="projeto_id" value="{{ projeto.projeto_id }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="csrf_token"
+        value="{{ csrf_token() }}">
+    <div class="form-group">
+        <label for="projectName">Nome do Projeto</label>
+        <input type="text" class="form-control" id="projectName" name="nome" required value="{{ projeto.nome }}">
+    </div>
+
+    <div class="form-group">
+        <label for="startDate">Data de Início</label>
+        <input type="date" class="form-control" id="startDate" name="data_inicio" required
+            value="{{ projeto.data_inicio }}">
+    </div>
+
+    <div class="form-group">
+        <label for="endDate">Data de Fim</label>
+        <input type="date" class="form-control" id="endDate" name="data_fim" value="{{ projeto.data_fim }}">
+    </div>
+
+    <div class="form-group">
+        <label for="projectStatus">Status</label>
+        <select class="form-control" id="projectStatus" name="status" required>
+            <option value="Em Andamento" {% if projeto.status=='Em Andamento' %} selected {% endif %}>Em Andamento
+            </option>
+            <option value="Concluído" {% if projeto.status=='Concluído' %} selected {% endif %}>Concluído</option>
+            <option value="Pendente" {% if projeto.status=='Pendente' %} selected {% endif %}>Pendente</option>
+            <option value="Cancelado" {% if projeto.status=='Cancelado' %} selected {% endif %}>Cancelado</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="contractValue">Valor do Contrato (R$)</label>
+        <input type="number" class="form-control" id="contractValue" name="valor_contrato" step="0.01" required
+            value="{{ projeto.valor_contrato }}">
+    </div>
+
+    <div class="form-group">
+        <label for="executionDays">Dias de Execução</label>
+        <input type="number" class="form-control" id="executionDays" name="dias_de_execucao" required
+            value="{{ projeto.dias_de_execucao }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form>

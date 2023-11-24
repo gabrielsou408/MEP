@@ -1,0 +1,36 @@
+<form action="{{ url_for('processar_adicao_funcionario') }}" method="post">
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="nome" id="nome-hidden" value="">
+    <input type="hidden" name="email" id="email-hidden" value="">
+
+    <select name="usuario_id" id="usuario-select" class="form-control" required>
+        {% for usuario in usuarios %}
+        <option value="{{ usuario['usuario_id'] }}" data-nome="{{ usuario['nome'] }}"
+            data-email="{{ usuario['email'] }}">
+            {{ usuario['nome'] }} - {{ usuario['email'] }}
+        </option>
+        {% endfor %}
+    </select>
+    <div class="form-group">
+        <label for="cargo">Cargo</label>
+        <input type="text" name="cargo" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="data_contratacao">Data de Contratação</label>
+        <input type="date" name="data_contratacao" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="salario">Salário</label>
+        <input type="number" name="salario" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="departamento">Departamento</label>
+        <select name="departamento_id" class="form-control" required>
+            {% for departamento in departamentos %}
+            <option value="{{ departamento['departamento_id'] }}">{{ departamento['nome'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Adicionar</button>
+</form>

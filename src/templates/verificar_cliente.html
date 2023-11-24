@@ -1,0 +1,10 @@
+<div class="form-group">
+    <label for="clientSelect">Cliente</label>
+    <select class="form-control" id="clientSelect" name="cliente_id" required>
+        <option value="">Selecione um cliente</option>
+        {% for cliente in clientes %}
+        <option value="{{ cliente['cliente_id'] }}">{{ cliente['nome'] }}</option>
+        {% endfor %}
+        <option value="new">Adicionar Novo Cliente</option>
+    </select>
+</div>

@@ -1,0 +1,23 @@
+<!-- funcionarios_section.html -->
+<table class="table">
+    <div class="funcionarios-header">
+        <h2>Lista de Funcionários</h2>
+        <button id="adicionar-funcionario-btn" class="btn btn-primary">Adicionar Funcionário</button>
+    </div>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Departamento</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for funcionario in funcionarios %}
+        <tr>
+            <td>{{ funcionario['nome'] }}</td>
+            <td>{{ funcionario['email'] }}</td>
+            <td>{{ funcionario['departamento'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
