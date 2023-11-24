@@ -1,0 +1,43 @@
+version: "3"
+services:
+  mysql_erp:
+    container_name: mysql_mkterp_pro
+    hostname: mysql_mkterp_pro
+    image: mysql
+    restart: always
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb_force_recovery=0
+    volumes:
+      - C:\Users\Rafael\Desktop\TCC-BD:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_DATABASE: mkterp_pro
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: senha
+      TZ: America/Sao_Paulo
+
+  hotmart:
+    container_name: mysql_hotmart
+    hostname: mysql_hotmart
+    image: mysql
+    restart: always
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb_force_recovery=0
+    volumes:
+      - D:\Hotmart - DB:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_DATABASE: hotmart
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: senha
+      TZ: America/Sao_Paulo
